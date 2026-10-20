@@ -346,7 +346,8 @@
 
                         // 获取语言设置
                         const preferredLang = localStorage.getItem('preferredLanguage');
-                        const isEnglish = currentPath.includes('/en/') || preferredLang === 'en';
+                        const isVietnamese = currentPath.startsWith('/vi/');
+                        const isEnglish = !isVietnamese && (currentPath.includes('/en/') || preferredLang === 'en');
 
                         // --- 获取当前主题状态 (新增逻辑) ---
                         // 这里是为了在创建 Giscus 时就设置正确的初始主题
@@ -358,13 +359,17 @@
 
                         const titleDiv = document.createElement('div');
                         titleDiv.className = 'giscus-toggle-title';
-                        titleDiv.innerHTML = isEnglish
+                        titleDiv.innerHTML = isVietnamese
+                            ? '💬 Thảo luận & Hỏi đáp'
+                            : isEnglish
                             ? '💬 Discussion & Questions'
                             : '💬 讨论与提问';
 
                         const hintText = document.createElement('p');
                         hintText.className = 'giscus-hint';
-                        hintText.textContent = isEnglish
+                        hintText.textContent = isVietnamese
+                            ? 'Nhấp để mở rộng/thu gọn'
+                            : isEnglish
                             ? 'Click to expand/collapse'
                             : '点击展开/收起';
 
@@ -400,7 +405,7 @@
                         // 如果当前 body 有 dark-mode 类，则初始化为 'dark'，否则 'light'
                         giscusScript.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
                         
-                        giscusScript.setAttribute('data-lang', isEnglish ? 'en' : 'zh-CN');
+                        giscusScript.setAttribute('data-lang', isVietnamese ? 'vi' : isEnglish ? 'en' : 'zh-CN');
                         giscusScript.setAttribute('data-loading', 'lazy');
                         giscusScript.crossOrigin = 'anonymous';
                         giscusScript.async = true;
@@ -429,6 +434,33 @@
                         if (article) {
                             article.appendChild(giscusContainer);
                         }
+                    });
+
+                    // Localize docsify chrome (word count and pagination) on Vietnamese routes.
+                    hook.doneEach(function() {
+                        if (!vm.route.path.startsWith('/vi/')) {
+                            return;
+                        }
+
+                        const countLabel = document.querySelector('.markdown-section > div > span[style*="float"]');
+                        if (countLabel) {
+                            const match = countLabel.textContent.trim().match(/^(\d+)\s*字\s*\|\s*(\d+)\s*分钟$/);
+                            if (match) {
+                                countLabel.textContent = match[1] + ' từ | ' + match[2] + ' phút';
+                            }
+                        }
+
+                        document.querySelectorAll('.pagination-item').forEach(function(item) {
+                            const label = item.querySelector('.pagination-item-label > span');
+                            if (!label) {
+                                return;
+                            }
+                            if (item.classList.contains('pagination-item--previous')) {
+                                label.textContent = 'Chương trước';
+                            } else if (item.classList.contains('pagination-item--next')) {
+                                label.textContent = 'Chương sau';
+                            }
+                        });
                     });
                 }
             ]
@@ -570,7 +602,7 @@
             // 首次访问(没有偏好设置)时,默认显示中文版
             if (preferredLang) {
                 // 如果用户有语言偏好,且当前 URL 不匹配偏好,则自动切换
-                if (preferredLang === 'en' && !currentHash.includes('/en/')) {
+                if (preferredLang === 'en' && !currentHash.includes('/en/') && !currentHash.includes('/vi/')) {
                     // 用户偏好英文,但当前是中文页面
                     let path = currentHash.replace('#/', '');
 
@@ -604,6 +636,46 @@
             } else {
                 langBtn.textContent = 'English';
             }
+        });
+
+        // Route language-selector links through Docsify instead of loading raw Markdown.
+        document.addEventListener('click', function(event) {
+            const link = event.target.closest && event.target.closest('a[href]');
+            if (!link || link.target || event.defaultPrevented ||
+                event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                return;
+            }
+
+            let url;
+            try {
+                url = new URL(link.href, window.location.href);
+            } catch (e) {
+                return;
+            }
+
+            if (url.origin !== window.location.origin) {
+                return;
+            }
+
+            // Resolve from the authored href, not the served path, so this also
+            // works when the site is hosted under a sub-path.
+            const href = (link.getAttribute('href') || '').split('#')[0].split('?')[0];
+            const filename = href.split('/').pop();
+            let route = null;
+            if (filename === 'README_EN.md') {
+                route = '#/en/README_EN.md';
+            } else if (filename === 'README.md') {
+                route = href.indexOf('vi/') !== -1 ? '#/vi/README.md' : '#/README.md';
+            }
+
+            if (!route) {
+                return;
+            }
+
+            localStorage.setItem('preferredLanguage',
+                route.indexOf('#/vi/') === 0 ? 'vi' : route.indexOf('#/en/') === 0 ? 'en' : 'zh');
+            event.preventDefault();
+            window.location.hash = route;
         });
     </script>
 </body>
