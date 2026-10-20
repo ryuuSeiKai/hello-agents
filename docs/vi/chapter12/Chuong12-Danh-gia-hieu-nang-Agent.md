@@ -1463,7 +1463,7 @@ Khớp một phần: ███████████████████�
 - 💡 Khuyến nghị kiểm tra năng lực sử dụng công cụ và suy luận nhiều bước.
 ```
 
-**Kết quả định dạng GAIA được sinh (`gaia_level1_result_*.jsonl`): <strong>
+**Kết quả định dạng GAIA được sinh (`gaia_level1_result_*.jsonl`):**
 
 ```json
 {"task_id": "e1fc63a2-da7a-432f-be78-7c4a95598703", "model_answer": "24000", "reasoning_trace": "24000"}
@@ -1474,7 +1474,7 @@ Khớp một phần: ███████████████████�
 
 Sau khi dùng GAIAEvaluationTool chạy đánh giá, trong thư mục `evaluation_results/gaia_official/` sẽ sinh các tệp cần thiết để gửi và hướng dẫn gửi chi tiết.
 
-1. </strong>Tệp kết quả định dạng GAIA**: `gaia_level1_result_*.jsonl`
+1. **Tệp kết quả định dạng GAIA**: `gaia_level1_result_*.jsonl`
    ```json
    {"task_id": "xxx", "model_answer": "câu trả lời", "reasoning_trace": "quá trình suy luận"}
    {"task_id": "yyy", "model_answer": "câu trả lời", "reasoning_trace": "quá trình suy luận"}

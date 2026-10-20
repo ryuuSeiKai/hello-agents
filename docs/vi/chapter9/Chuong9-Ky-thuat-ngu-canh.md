@@ -2058,7 +2058,7 @@ Trợ lý bảo trì cơ sở mã của chúng ta dùng kiến trúc ba tầng, 
 Bây giờ chúng ta hãy hiện thực lớp cốt lõi của hệ thống này:
 
 ```python
-from typing import Dict， Any, List, Optional
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 import json
 

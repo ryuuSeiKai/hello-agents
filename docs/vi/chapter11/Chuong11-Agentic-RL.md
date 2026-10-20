@@ -136,7 +136,7 @@ Mục tiêu của Agentic RL là trao cho Agent LLM sáu năng lực cốt lõi,
 
 <strong>Suy luận (Reasoning)</strong> là quá trình rút ra kết luận một cách logic từ thông tin đã cho, là năng lực cốt lõi của Agent. Phương pháp prompt CoT truyền thống dựa vào ví dụ ít mẫu, năng lực tổng quát hóa hạn chế; SFT chỉ có thể bắt chước các mẫu suy luận trong dữ liệu huấn luyện, khó đổi mới. Ưu điểm của học tăng cường là học được chiến lược suy luận hiệu quả qua thử và sai, phát hiện những con đường suy luận không có trong dữ liệu huấn luyện, học được khi nào cần suy nghĩ sâu, khi nào có thể trả lời nhanh. Nhiệm vụ suy luận có thể được mô hình hóa như bài toán quyết định tuần tự: cho bài toán $q$, Agent cần sinh chuỗi suy luận $c = (c_1, c_2, ..., c_n)$ và đáp án cuối cùng $a$. Hàm phần thưởng thường được thiết kế là $r(q, c, a) = 1$ if $a = a^*$ else $0$, mục tiêu huấn luyện là $\max_\theta \mathbb{E}_{q, (c,a) \sim \pi_\theta} [r(q, c, a)]$. Bằng cách này, mô hình học được cách sinh chuỗi suy luận chất lượng cao, chứ không chỉ ghi nhớ đáp án.
 
-<strong>Sử dụng công cụ (Tool Use)</strong> là năng lực Agent gọi công cụ bên ngoài để hoàn thành nhiệm vụ. Trong nhiệm vụ sử dụng công cụ, không gian hành động mở rộng thành $a_t \in \{a_t^{\text{think}}, a_t^{\text{tool}}\}$, trong đó $a_t^{\text{think}}$ là sinh quá trình suy nghĩ, $a_t^{\text{tool}} = (\text{tool\_name}， \text{arguments})$ là gọi công cụ. Học tăng cường giúp Agent học được khi nào cần dùng công cụ, chọn công cụ nào, kết hợp nhiều công cụ ra sao. Ví dụ, khi giải bài toán, Agent cần học khi nào dùng máy tính, khi nào dùng trình thông dịch mã, khi nào suy luận trực tiếp.
+<strong>Sử dụng công cụ (Tool Use)</strong> là năng lực Agent gọi công cụ bên ngoài để hoàn thành nhiệm vụ. Trong nhiệm vụ sử dụng công cụ, không gian hành động mở rộng thành $a_t \in \{a_t^{\text{think}}, a_t^{\text{tool}}\}$, trong đó $a_t^{\text{think}}$ là sinh quá trình suy nghĩ, $a_t^{\text{tool}} = (\text{tool\_name}, \text{arguments})$ là gọi công cụ. Học tăng cường giúp Agent học được khi nào cần dùng công cụ, chọn công cụ nào, kết hợp nhiều công cụ ra sao. Ví dụ, khi giải bài toán, Agent cần học khi nào dùng máy tính, khi nào dùng trình thông dịch mã, khi nào suy luận trực tiếp.
 
 <strong>Bộ nhớ (Memory)</strong> là năng lực Agent giữ lại và tái sử dụng thông tin quá khứ, rất quan trọng với nhiệm vụ dài hạn. Cửa sổ ngữ cảnh của LLM có hạn, chiến lược truy xuất tĩnh (như RAG) không thể tối ưu theo nhiệm vụ. Học tăng cường giúp Agent học chiến lược quản lý bộ nhớ: quyết định thông tin nào đáng nhớ, khi nào cập nhật bộ nhớ, khi nào xóa thông tin lỗi thời. Điều này tương tự bộ nhớ làm việc của con người, chúng ta chủ động quản lý thông tin trong não, giữ lại cái quan trọng, quên cái không liên quan.
 
@@ -1136,7 +1136,7 @@ sft_data = json.loads(sft_result)
 # So sánh kết quả
 print("So sánh mô hình:")
 print(f"Độ chính xác mô hình tiền huấn luyện: {base_data['accuracy']}")
-print(f"Độ chính xác mô hình SFT: {sft_data['accuracy']}"
+print(f"Độ chính xác mô hình SFT: {sft_data['accuracy']}")
 ```
 
 Trong mục này, chúng ta đã học tầm quan trọng của SFT (học định dạng, xây dựng baseline), nguyên lý LoRA (phân rã hạng thấp, hiệu quả tham số), thực hành huấn luyện SFT (cấu hình tham số, giám sát huấn luyện), đánh giá mô hình (độ chính xác, phân tích so sánh).
@@ -2298,11 +2298,11 @@ accelerate launch --config_file multi_gpu_ddp.yaml train_script.py
 accelerate launch --num_processes 4 --mixed_precision fp16 train_script.py
 ```
 
-</strong>(3) Huấn luyện với DeepSpeed ZeRO</strong>
+<strong>(3) Huấn luyện với DeepSpeed ZeRO</strong>
 
-</strong>DeepSpeed ZeRO</strong> giảm mạnh mức chiếm bộ nhớ GPU bằng cách phân mảnh trạng thái optimizer, gradient và tham số mô hình, hỗ trợ mô hình lớn hơn và batch size lớn hơn.
+<strong>DeepSpeed ZeRO</strong> giảm mạnh mức chiếm bộ nhớ GPU bằng cách phân mảnh trạng thái optimizer, gradient và tham số mô hình, hỗ trợ mô hình lớn hơn và batch size lớn hơn.
 
-</strong>Tệp cấu hình ZeRO-2</strong> (`deepspeed_zero2.yaml`):
+<strong>Tệp cấu hình ZeRO-2</strong> (`deepspeed_zero2.yaml`):
 
 ```yaml
 compute_environment: LOCAL_MACHINE
@@ -2321,7 +2321,7 @@ deepspeed_config:
   zero_stage: 2  # ZeRO-2
 ```
 
-</strong>Tệp cấu hình ZeRO-3</strong> (`deepspeed_zero3.yaml`):
+<strong>Tệp cấu hình ZeRO-3</strong> (`deepspeed_zero3.yaml`):
 
 ```yaml
 compute_environment: LOCAL_MACHINE
