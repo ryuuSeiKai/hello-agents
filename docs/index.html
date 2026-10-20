@@ -550,6 +550,10 @@
             ]
         };
 
+        // Capture the stored preference before Docsify can emit hashchange events.
+        const initialPreferredLanguage = localStorage.getItem('preferredLanguage');
+        let startupPreferenceApplied = false;
+
         function decodeRoute(hash) {
             let path = hash.replace(/^#\/?/, '').split('?')[0];
             try {
@@ -636,20 +640,23 @@
             }
         }
 
-        // Apply the stored language preference on startup and sync the selector.
+        // Apply the captured startup preference before hashchange may persist the route language.
         window.addEventListener('load', function() {
-            const preferredLang = localStorage.getItem('preferredLanguage');
+            const preferredLang = initialPreferredLanguage;
             if ((preferredLang === 'zh' || preferredLang === 'en' || preferredLang === 'vi') &&
                 preferredLang !== detectLanguage(window.location.hash)) {
                 const key = getRouteKey(window.location.hash) || 'landing';
                 window.location.hash = routeFor(preferredLang, key);
             }
+            startupPreferenceApplied = true;
             updateLanguageSelector();
         });
 
         window.addEventListener('hashchange', function() {
             updateLanguageSelector();
-            localStorage.setItem('preferredLanguage', detectLanguage(window.location.hash));
+            if (startupPreferenceApplied) {
+                localStorage.setItem('preferredLanguage', detectLanguage(window.location.hash));
+            }
         });
 
         // Route language-selector links through Docsify instead of loading raw Markdown.
