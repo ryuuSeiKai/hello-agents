@@ -566,7 +566,7 @@ Bây giờ hãy xem bốn Agent này cộng tác thế nào để hoàn thành n
 ```python
 class TripPlannerAgent:
     def __init__(self):
-        self.attraction_agent = SimpleAgent(name="Tìm kiếm điểm tham quan"prompt=ATTRACTION_PROMPT)
+        self.attraction_agent = SimpleAgent(name="Tìm kiếm điểm tham quan", prompt=ATTRACTION_PROMPT)
         self.weather_agent = SimpleAgent(name="Truy vấn thời tiết", prompt=WEATHER_PROMPT)
         self.hotel_agent = SimpleAgent(name="Gợi ý khách sạn", prompt=HOTEL_PROMPT)
         self.planner_agent = SimpleAgent(name="Lập kế hoạch hành trình", prompt=PLANNER_PROMPT)
@@ -709,7 +709,7 @@ mcp_tool = MCPTool(
 
 Đoạn mã này làm gì? Thứ nhất, `command` và `args` chỉ định cách khởi động máy chủ MCP. `npx -y @sugarforever/amap-mcp-server` sẽ tải và chạy gói `amap-mcp-server` từ kho npm. Tham số `env` truyền biến môi trường, ở đây chúng ta truyền API key của Amap.
 
-**Lưu ý:** một số ví dụ trong tài liệu này dùng `npx` để khởi động dịch vụ MCP (Model Context Protocol). Trong kho mã của mục này, chúng ta thực tế dùng cách `uvx`. Cần nói rõ rằng `npx` và `uvx` có triết lý thiết kế rất nhất quán, chỉ khác hệ sinh thái: `npx` hướng tới JavaScript/Node.js (gói từ npm), còn `uvx` hướng tới Python (gói từ PyPI). Hai cách không phân biệt ưu nhược, mọi người hãy chọn theo nhu cầu khi sử dụng.
+<strong>Lưu ý:</strong> một số ví dụ trong tài liệu này dùng `npx` để khởi động dịch vụ MCP (Model Context Protocol). Trong kho mã của mục này, chúng ta thực tế dùng cách `uvx`. Cần nói rõ rằng `npx` và `uvx` có triết lý thiết kế rất nhất quán, chỉ khác hệ sinh thái: `npx` hướng tới JavaScript/Node.js (gói từ npm), còn `uvx` hướng tới Python (gói từ PyPI). Hai cách không phân biệt ưu nhược, mọi người hãy chọn theo nhu cầu khi sử dụng.
 
 Khi chúng ta tạo đối tượng `MCPTool`, nó sẽ khởi động tiến trình máy chủ MCP ở nền, và giao tiếp với máy chủ qua stdin/stdout. Đây là một đặc điểm của giao thức MCP: dùng giao tiếp giữa các tiến trình thay vì HTTP, nhờ vậy hiệu quả hơn và dễ quản lý hơn.
 

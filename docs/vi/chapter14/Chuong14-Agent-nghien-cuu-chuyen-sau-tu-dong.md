@@ -1081,14 +1081,14 @@ Khi Agent cần gọi công cụ, nó sẽ tạo chỉ thị gọi công cụ, n
   <p>Hình 14.7 Quy trình gọi công cụ</p>
 </div>
 
-**Quy trình gọi công cụ<strong>:
+<strong>Quy trình gọi công cụ</strong>:
 
-1. </strong>Agent tạo chỉ thị<strong>: Agent tạo chỉ thị gọi công cụ, như `[TOOL_CALL:search_tool:{"input": "tổ chức Datawhale", "backend": "tavily"}]`
-2. </strong>Phân tích chỉ thị<strong>: `ToolRegistry` phân tích chỉ thị, trích xuất tên công cụ và tham số
-3. </strong>Tìm công cụ<strong>: `ToolRegistry` tìm công cụ tương ứng theo tên công cụ
-4. </strong>Gọi công cụ<strong>: gọi phương thức `run` của công cụ, truyền tham số
-5. </strong>Trả về kết quả<strong>: công cụ trả về kết quả thực thi
-6. </strong>Định dạng kết quả<strong>: định dạng kết quả thành chuỗi, trả về cho Agent
+1. <strong>Agent tạo chỉ thị</strong>: Agent tạo chỉ thị gọi công cụ, như `[TOOL_CALL:search_tool:{"input": "tổ chức Datawhale", "backend": "tavily"}]`
+2. <strong>Phân tích chỉ thị</strong>: `ToolRegistry` phân tích chỉ thị, trích xuất tên công cụ và tham số
+3. <strong>Tìm công cụ</strong>: `ToolRegistry` tìm công cụ tương ứng theo tên công cụ
+4. <strong>Gọi công cụ</strong>: gọi phương thức `run` của công cụ, truyền tham số
+5. <strong>Trả về kết quả</strong>: công cụ trả về kết quả thực thi
+6. <strong>Định dạng kết quả</strong>: định dạng kết quả thành chuỗi, trả về cho Agent
 
 ## 14.5 Triển khai tầng dịch vụ
 
@@ -1098,14 +1098,14 @@ Phần này sẽ giới thiệu chi tiết việc triển khai các dịch vụ 
 
 `PlanningService` chịu trách nhiệm gọi Agent lập kế hoạch nghiên cứu, phân rã chủ đề nghiên cứu thành nhiệm vụ con. Đây là bước đầu tiên và cũng là bước then chốt nhất của toàn bộ quy trình nghiên cứu.
 
-</strong>(1) Triển khai phương án<strong>
+<strong>(1) Triển khai phương án</strong>
 
 Trách nhiệm cốt lõi của nó là:
 
-1. </strong>Xây dựng Prompt lập kế hoạch<strong>: xây dựng Prompt dựa trên chủ đề nghiên cứu và ngày hiện tại
-2. </strong>Gọi Agent lập kế hoạch<strong>: gọi TODO Planner Agent để tạo danh sách nhiệm vụ con
-3. </strong>Phân tích phản hồi JSON<strong>: trích xuất danh sách nhiệm vụ con định dạng JSON từ phản hồi của Agent
-4. </strong>Xác thực định dạng nhiệm vụ con**: đảm bảo mỗi nhiệm vụ con chứa các trường bắt buộc (title, intent, query)
+1. <strong>Xây dựng Prompt lập kế hoạch</strong>: xây dựng Prompt dựa trên chủ đề nghiên cứu và ngày hiện tại
+2. <strong>Gọi Agent lập kế hoạch</strong>: gọi TODO Planner Agent để tạo danh sách nhiệm vụ con
+3. <strong>Phân tích phản hồi JSON</strong>: trích xuất danh sách nhiệm vụ con định dạng JSON từ phản hồi của Agent
+4. <strong>Xác thực định dạng nhiệm vụ con</strong>: đảm bảo mỗi nhiệm vụ con chứa các trường bắt buộc (title, intent, query)
 
 ```python
 import re
@@ -1382,6 +1382,18 @@ class SummarizationService:
         Định dạng kết quả tìm kiếm thành văn bản dễ đọc, bao gồm:
         - Số thứ tự
         - Tiêu đề
+        - URL
+        - Đoạn trích
+        """
+        formatted = []
+        for idx, result in enumerate(search_results, start=1):
+            formatted.append(
+                f"[{idx}] {result['title']}\n"
+                f"URL: {result['url']}\n"
+                f"Snippet: {result['snippet']}\n"
+            )
+        return "\n".join(formatted)
+```
 
 ### Thiết kế cấu trúc báo cáo
 
@@ -1397,7 +1409,6 @@ Báo cáo cuối cùng nên bao gồm các phần sau,.......
 - https://example.com/gpt4v
 ....
 ...
-```
 
 ### 14.5.3 Dịch vụ tạo báo cáo
 
@@ -1609,13 +1620,13 @@ Chọn công cụ tìm kiếm theo cấu hình, như thể hiện trong Hình 14
   <p>Hình 14.8 Quy trình điều phối công cụ tìm kiếm</p>
 </div>
 
-**Logic điều phối<strong>:
+<strong>Logic điều phối</strong>:
 
-1. </strong>Đọc cấu hình<strong>: đọc cấu hình `SEARCH_API` từ tệp `.env`
-2. </strong>Chọn công cụ<strong>: chọn công cụ tìm kiếm theo cấu hình (tavily, duckduckgo, perplexity...)
-3. </strong>Thực hiện tìm kiếm<strong>: gọi SearchTool để thực hiện tìm kiếm
-4. </strong>Xử lý kết quả<strong>: loại trùng, giới hạn Token, định dạng
-5. </strong>Trả về kết quả<strong>: trả về kết quả tìm kiếm đã xử lý
+1. <strong>Đọc cấu hình</strong>: đọc cấu hình `SEARCH_API` từ tệp `.env`
+2. <strong>Chọn công cụ</strong>: chọn công cụ tìm kiếm theo cấu hình (tavily, duckduckgo, perplexity...)
+3. <strong>Thực hiện tìm kiếm</strong>: gọi SearchTool để thực hiện tìm kiếm
+4. <strong>Xử lý kết quả</strong>: loại trùng, giới hạn Token, định dạng
+5. <strong>Trả về kết quả</strong>: trả về kết quả tìm kiếm đã xử lý
 
 Để nâng cao hiệu quả và giảm chi phí, chúng ta có thể thêm bộ nhớ đệm kết quả tìm kiếm:
 
@@ -1677,10 +1688,10 @@ Trong các chương trước, chúng ta đã triển khai hệ thống backend h
 
 Trợ lý nghiên cứu chuyên sâu áp dụng thiết kế UI hộp thoại modal toàn màn hình, thiết kế này có các ưu điểm sau:
 
-1. </strong>Trải nghiệm đắm chìm<strong>: hiển thị toàn màn hình, tránh xao nhãng, tập trung vào nghiên cứu
-2. </strong>Phân cấp rõ ràng<strong>: trang chính và trang nghiên cứu tách biệt, phân cấp rõ ràng
-3. </strong>Dễ đóng<strong>: nhấn nút đóng hoặc phím ESC để quay về trang chính
-4. </strong>Thiết kế responsive<strong>: thích ứng với các kích thước màn hình khác nhau
+1. <strong>Trải nghiệm đắm chìm</strong>: hiển thị toàn màn hình, tránh xao nhãng, tập trung vào nghiên cứu
+2. <strong>Phân cấp rõ ràng</strong>: trang chính và trang nghiên cứu tách biệt, phân cấp rõ ràng
+3. <strong>Dễ đóng</strong>: nhấn nút đóng hoặc phím ESC để quay về trang chính
+4. <strong>Thiết kế responsive</strong>: thích ứng với các kích thước màn hình khác nhau
 
 Như thể hiện trong Hình 14.9, hộp thoại modal toàn màn hình gồm các phần sau:
 
@@ -1689,12 +1700,12 @@ Như thể hiện trong Hình 14.9, hộp thoại modal toàn màn hình gồm c
   <p>Hình 14.9 UI hộp thoại modal toàn màn hình</p>
 </div>
 
-</strong>Thành phần UI<strong>:
+<strong>Thành phần UI</strong>:
 
-1. </strong>Thanh trên cùng<strong>: chứa chủ đề nghiên cứu và nút đóng
-2. </strong>Vùng tiến độ<strong>: hiển thị tiến độ nghiên cứu hiện tại (lập kế hoạch, thực thi, báo cáo)
-3. </strong>Vùng nội dung<strong>: hiển thị kết quả nghiên cứu (định dạng Markdown)
-4. </strong>Thanh dưới cùng**: hiển thị thông tin trạng thái (như "Đang nghiên cứu...", "Đã hoàn thành")
+1. <strong>Thanh trên cùng</strong>: chứa chủ đề nghiên cứu và nút đóng
+2. <strong>Vùng tiến độ</strong>: hiển thị tiến độ nghiên cứu hiện tại (lập kế hoạch, thực thi, báo cáo)
+3. <strong>Vùng nội dung</strong>: hiển thị kết quả nghiên cứu (định dạng Markdown)
+4. <strong>Thanh dưới cùng</strong>: hiển thị thông tin trạng thái (như "Đang nghiên cứu...", "Đã hoàn thành")
 
 Triển khai Vue tương ứng như sau (ResearchModal.vue):
 
