@@ -187,7 +187,7 @@ Liên kết video và tài liệu kèm theo có tại [Đồng sáng tạo ghi h
 ## Nhóm giao lưu độc giả
 
 <div align='center'>
-    <img src="../../读者群二维码.png" alt="Mã QR nhóm độc giả" width="30%">
+    <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/读者群二维码.png" alt="Mã QR nhóm độc giả" width="30%">
     <p>Quét mã QR để tham gia nhóm giao lưu độc giả, trao đổi với nhiều người học hơn</p>
 </div>
 

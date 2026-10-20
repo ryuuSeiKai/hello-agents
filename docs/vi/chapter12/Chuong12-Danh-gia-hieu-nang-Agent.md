@@ -1992,7 +1992,7 @@ Thiết kế prompt sinh đề (tiếng Anh):
 ```python
 GENERATION_PROMPT = """You are a professional mathematics competition problem designer, skilled in creating AIME (American Invitational Mathematics Examination) style problems.
 
-[Reference Example](For style reference only, please generate a completely different problem)
+【Reference Example】(For style reference only, please generate a completely different problem)
 Problem: {example_problem}
 Answer: {example_answer}
 

@@ -567,6 +567,7 @@ Hiệu quả sinh video như trong Hình 5.33.
 <div align="center">
   <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-06.png" alt="Mô tả hình ảnh" width="50%"/>
   <p>Hình 5.33 Trợ lý video</p>
+</div>
 
 <strong>Mô-đun truy vấn và phân tích dữ liệu</strong>
 
